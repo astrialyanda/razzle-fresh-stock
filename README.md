@@ -1,7 +1,7 @@
 # razzle-fresh-stock
 Click untuk menuju website [razzle-fresh-stock](https://razzle-fresh-stock.adaptable.app)
 
-# Implementasi Checklist
+# Implementasi Checklist Tugas 2
 step-by-step pengerjaan proyek Django.
 
 ## Membuat Proyek Django Baru
@@ -114,4 +114,173 @@ MVC, MVT, dan MVVM adalah pola desain arsitektur yang yang membagi aplikasi menj
 
 Perbedaan utama antara MVC, MVT, dan MVVM adalah peran penenah komponen. Pada MVC, yang berperan sebagai penengah komponen adalah Controller. Pada MVT, yang menjadi penengah adalah View. Sedangkan pada MVVM, yang menjadi penengah adalah ViewModel.
 
+# Apa Perbedaan POST dan GET dalam Django?
+Dalam Django, POST dan GET adalah dua method HTTP yang digunakan dalam penggunaan form. Kedua method ini memiliki fungsi yang berbeda. <br>
 
+1. **POST** : form login Django dikembalikan ke server menggunakan method POST. Dengan menjalani method POST maka akan mengubah keadaan server.
+2. **GET** : Method GET digunakan untuk mengambil data dari server. Method GET mengumpulkan data yang disubmit/dikirim lalu menjadikannya sebuah URL. URL tersebut berisi address dimana data harus dikirimkan beserta keys dan valuesnya. 
+
+# Apa Perbedaan antara XML, JSON, dan HTML dalam Pengiriman Data?
+Terdapat perbedaan utama antara XML dan JSON dengan HTML. XML dan JSON digunakan sebagai penyimpanan dan transmisi data sedangkan HTML digunakan untuk menjelaskan bagaimana data tersebut ditampilkan. <br>
+XML (_Extensible Markup Language_) berasal dari SGML (_Standard Generalized Markup Language_). Pada XML kita dapat membuat custom tag dan struktur dokumen. Syntax XML lebih boros daripada JSON.
+JSON (_JavaScript Object Notation_) dibuat berdasarkan bahasa JavaScript. Pada JSON sudah terdapat data type yang telah ditentukan sebelumnya. Syntax JSON lebih simple/sederhana dibandingkan XML. JSON lebih banyak digunakan dalam aplikasi data delivery di web modern.
+
+# Mengapa JSON Sering Digunakan dalam Pertukaran Data dalam Web Modern?
+JSON memiliki ukuran file yang lebih kecil dengan transmisi data yang lebih cepat dibandingkan dengan XML. Syntax tag yang terdapat pada XML membuat lebih kompleks untuk ditulis sehingga membuat ukuran file yang lebih besar.
+
+# Implementasi Checklist Tugas 3
+step-by-step
+## Membuat input form untuk menambahkan objek model pada app sebelumnya
+1. membuat berkas `forms.py` dalam direktori `main`. Lalu mengisi berkas `forms.py` dengan kode berikut:
+```
+from django.forms import ModelForm
+from main.models import Product
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = ["name", "amount", "description"]
+```
+2. menambahkan import pada berkas `views.py` yang ada di direktori `main`.
+```
+from django.http import HttpResponseRedirect
+from main.forms import ProductForm
+from django.urls import reverse
+```
+3. membuat fungsi `create_product` di dalam berkas `views.py`. Berikut isi dari fungsi `create_product`:
+```
+def create_product(request):
+    form = ProductForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "create_product.html", context)
+```
+
+## Tambahkan 5 fungsi views untuk melihat objek yang sudah ditambahkan dalam format HTML, XML, JSON, XML by ID, dan JSON by ID
+**HTML**
+1. menambahkan kode `products = Product.objects.all()` di dalam fungsi `show_main` berkas `views.py`. serta menambahkan kode `'products': products` di dalam context.
+2. import fungsi `create_product` serta menambahkan path url `path('create-product', create_product, name='create_product'),` ke dalam `urlpatterns` di berkas `urls.py` di folder `main`.
+3. membuat berkas HTML baru pada direktori `main/templates` bernama `create_product.html`. berikut isi dari `create_produdct.html` :
+```
+{% extends 'base.html' %} 
+
+{% block content %}
+<h1>Add New Product</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Add Product"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+```
+4. menambahkan potongan kode ke dalam `{% block content%}` untuk menampilkan data produk.
+```
+...
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Date Added</th>
+    </tr>
+
+    {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
+
+    {% for product in products %}
+        <tr>
+            <td>{{product.name}}</td>
+            <td>{{product.price}}</td>
+            <td>{{product.description}}</td>
+            <td>{{product.date_added}}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<br />
+
+<a href="{% url 'main:create_product' %}">
+    <button>
+        Add New Product
+    </button>
+</a>
+
+{% endblock content %}
+```
+5. setelah semua step diatas dilakukan, jalankan proyek Django dengan menjalankan perintah `python manage.py runserver` di terminal serta membuka http://localhost:8000 (memindahkan path main/ ke home). Tambahkan beberapa input form dari web, maka data dapat dilihat dalam bentuk HTML.
+
+**XML, JSON, XML by ID, JSON by ID**
+1. menambahkan import ke dalam `views.py` di dalam direktori `main`.
+```
+from django.http import HttpResponse
+from django.core import serializers
+```
+2. untuk XML dan JSON, membuat fungsi dengan parameter `request` dengan sebuah variabel yang menyimpan hasil query seluruh data yang ada pada `Product`. serta tambahkan return berupa `HttpResponse` <br>
+XML :
+```
+def show_xml(request):
+    data = Product.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+```
+JSON :
+```
+def show_json(request):
+    data = Product.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+```
+3. untuk XML by ID dan JSON by ID, variabel menyimpan data dengan id tertentu. <br>
+XML by ID:
+```
+def show_xml_by_id(request, id):
+    data = Product.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+```
+JSON by ID:
+```
+def show_json_by_id(request, id):
+    data = Product.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+```
+
+## Membuat _routing_ URL untuk masing-masing views yang telah ditambahkan
+menambahkan import fungsi yang sudah dibuat ke `urls.py` pada folder `main`.
+```
+from main.views import show_main, create_product, show_xml, show_json, show_xml_by_id, show_json_by_id 
+```
+kemudian tambahkan path url ke dalam `urlpatterns` untuk mengakses fungsi yang sudah diimport.
+```
+...
+path('xml/', show_xml, name='show_xml'), 
+path('json/', show_json, name='show_json'), 
+path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
+path('json/<int:id>/', show_json_by_id, name='show_json_by_id'),
+...
+```
+
+# Akses URL menggunakan Postman
+HTML :
+![](html.png)
+
+XML :
+![](xml.png)
+
+JSON :
+![](json.png)
+
+XML by ID :
+![](xml_by_id.png)
+
+JSON by ID :
+![](json_by_id.png)
