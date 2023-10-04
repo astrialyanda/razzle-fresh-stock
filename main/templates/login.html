@@ -6,28 +6,32 @@
 
 {% block content %}
 
-<div class = "login">
+<body style = "background-color: #f5f0b8;">
+    <nav class="navbar navbar-light" style = "background-color: #c25b08;">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1" style = "color: white;">Razzle Fresh Stock</span>
+        </div>
+    </nav>
+<div class = "login" style = "padding:70px; margin:auto">
 
-    <h1>Login</h1>
+    <h1 style = "text-align:center; letter-spacing: 2px;">Login</h1>
 
-    <form method="POST" action="">
+    <form method="POST" action="" style = "box-sizing: border-box; ">
         {% csrf_token %}
-        <table>
-            <tr>
-                <td>Username: </td>
-                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
-            </tr>
+        <tr>
+            <p style = "margin: 5px 0px">Username: </p>
+            <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+        </tr>
                     
-            <tr>
-                <td>Password: </td>
-                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
-            </tr>
+        <tr>
+            <p style = "margin: 5px 0px;">Password: </p>
+            <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+        </tr>
 
-            <tr>
-                <td></td>
-                <td><input class="btn login_btn" type="submit" value="Login"></td>
-            </tr>
-        </table>
+        <tr>
+            <td></td>
+            <button type = "submit" value = "login" class = "btn btn-primary" style = "background-color:#c25b08; border: 0; border-radius: 5px; margin-top: 10px; margin-bottom: 10px; padding: 7px 12px">Login</button>
+        </tr>
     </form>
 
     {% if messages %}
@@ -41,5 +45,6 @@
     Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
 
 </div>
+</body>
 
 {% endblock content %}
