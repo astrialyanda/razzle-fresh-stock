@@ -1,6 +1,37 @@
 # razzle-fresh-stock
 Click untuk menuju website [razzle-fresh-stock](https://razzle-fresh-stock.adaptable.app)
 
+# Perbedaan _Asynchronous Programming_ dengan _Synchronous Programming_
+Pada _asynchronous programming_, operasi program berjalan secara paralel sehingga banyak program dapat berjalan bersamaan. Pada _synchronous programming_, hanya satu program yang dapat berjalan di satu waktu. _Asynchronous programming_ bersifat non-blocking, yang berarti dia akan mengirim banyak request kepada server.
+
+# _Event-Driven Programming_ pada AJAX
+_Event-Driven Programming_ adalah program dimana program tersebut menunggu hingga sebuah _event_ dipanggil sebelum program tersebut bereksekusi. _Event-Driven programming_ di AJAX yang diaplikasikan di tugas ini salah satunya adalah pada:
+```
+function addProduct() {
+        fetch("{% url 'main:add_product_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    document.getElementById("button_add").onclick = addProduct
+```
+pada potongan code diatas, fungsi `addProduct()` akan dipanggil jika ada event yang dibuat dari `onclick`.
+
+# Penerapan Asynchronous Programming pada AJAX
+AJAX memungkinkan halaman web untuk memperbarui data secara asinkronus dengan mengirimkan data ke peladen di balik layar. Hal ini memiliki arti bahwa kita dapat memperbarui beberapa elemen data pada halaman tanpa harus melakukan reload halaman secara keseluruhan.
+
+# AJAX Fetch API vs jQuery library
+AJAX Fetch API merupakan fitur yang native dari Javascript sehingga tersedia di semua browser tanpa butuh library external. Oleh karena itu, dibanding library jQuery, Fetch API lebih efisien. 
+
+# Implementasi Checklist Tugas 6
+1. AJAX GET dengan fungsi addProduct. Mengubah kode pada `htmlString` untuk menyesuaikan dengan cards.
+2. AJAX POST dengan membuat fungsi create_ajax di `views.py` serta meneyesuaikan pathnya di `urls.py`
+3. Melakukan perintah `collectstatic` di command prompt.
+
 # Manfaat dari Element Selector
 Dalam pengaplikasian CSS, penggunaan Element Selector sangat membantu dalam pembagian element untuk diaplikasikan desain CSS tertentu. Dengan penggunaan eleement selector maka suatu desain tidak harus diaplikasikan ke seluruh element di dalam page tersebut. Kustomisasi per elemen jadi emmungkinkan dengan penggunaan element selector.
 
