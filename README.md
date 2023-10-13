@@ -1,5 +1,5 @@
 # razzle-fresh-stock
-Click untuk menuju website [razzle-fresh-stock](https://razzle-fresh-stock.adaptable.app)
+Click untuk menuju website [razzle-fresh-stock](http://alyanda-astri-tugas.pbp.cs.ui.ac.id)
 
 # Perbedaan _Asynchronous Programming_ dengan _Synchronous Programming_
 Pada _asynchronous programming_, operasi program berjalan secara paralel sehingga banyak program dapat berjalan bersamaan. Pada _synchronous programming_, hanya satu program yang dapat berjalan di satu waktu. _Asynchronous programming_ bersifat non-blocking, yang berarti dia akan mengirim banyak request kepada server.
