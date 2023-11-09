@@ -1,6 +1,44 @@
 # razzle-fresh-stock
 Click untuk menuju website [razzle-fresh-stock](https://razzle-fresh-stock.adaptable.app)
 
+# Manfaat dari Element Selector
+Dalam pengaplikasian CSS, penggunaan Element Selector sangat membantu dalam pembagian element untuk diaplikasikan desain CSS tertentu. Dengan penggunaan eleement selector maka suatu desain tidak harus diaplikasikan ke seluruh element di dalam page tersebut. Kustomisasi per elemen jadi emmungkinkan dengan penggunaan element selector.
+
+# HTML5 Tag
+Ada banyak HTML5 tag. Beberapa contohnya yang digunakan dalam page ini adalah:
+
+1. \<button>\</button> </br>
+Membuat tombol yang dapat diklik
+2. \<table>\</tabel> </br>
+Membuat tabel
+3. \<body>\</body><br>
+Mendefinisikan badan/body dari page
+4. \<br>\</br><br>
+Memberikan satu line break
+5. \<a>\</a><br>
+Untuk memasukkan link
+6. \<div>\</div><br>
+Untuk membagi section
+7. \<h1>\</h1> - \<h6>\</h6><br>
+Heading page HTML
+8. \<p>\</p><br>
+Untuk membuat paragraf<br>
+
+Dan banyak tag-tag lainnya.
+
+# Perbedaan Margin dan Padding
+Margin adalah area di luar element. Sedangkan padding adalah area antara element dalam suatu container. 
+
+# Perbedaan Framework CSS Tailwind dan Bootstrap
+Framework Tailwind merupakan framework CSS yang mengutamakan kegunaan. Tailwind digunakan untuk membuat desain-desain custom. Sedangkan Bootstrap adalah framework yang banyak digunakan terutama karena responsif terhadap mobile. Bootstrap menyediakan banyak template dan tema ready-made. Tailwind menyediakan class-class unik yang mendahulukan kegunaannya. JIka suatu proyek berat pada backend, maka penggunaan Bootstrap yang telah menyediakan ready-made temlate lebih baik. Jika proyek lebih berat pada frontend, maka penggunaan Tailwind yang dapat dikustomisasi lebih baik.
+
+# Implementasi Checklist Tugas 5
+step-by-step
+## Kustomisasi desain pada template HTML pada halaman Login dan Register
+Setelah menambahkan fitur edit dan delete, saya melakukan kustomisasi page HTML menggunakan raw CSS dan Bootstrap. raw CSS digunakan untuk pewarnaan dan posisi. Bootstrap digunakan untuk menambahkan fitur Navigation Bar. 
+## Kustomisasi halaman daftar inventori dengan Card
+Menggunakan Card yang disediakan oleh Bootstrap dan melakukan for loop untuk mengisi cardnya dengan data.
+
 # Apa itu Django UserCreationForm?
 Django `UserCreationForm` adalah sistem authentication built in dari Django. Ketika kita menggunakan `UserCreationForm`, maka akan terbuat secara otomatis form field untuk mengisi username, password, dan password confirmation. Selain itu, kita bisa menambahkan field-field lain sesuai dengan yang kita tambahkan ke model `User`. Django `UserCreationForm` ini digunakan untuk membuat user baru yang dapat menggunakan web app.<br>
 Kelebihan dari menggunakan `UserCreationForm` antara lain:
@@ -17,7 +55,7 @@ Dalam konteks Django, autentikasi diimplementasikan dalam suatu views dan forms 
 
 # Apa itu _Cookies_?
 _Cookies_ adalah data berukuran kecil yang dikirim oleh web server kepada browser User dan disimpan di device User. _Cookies_ digunakan untuk menyimpan data sementara di sisi klien. Data ini digunakan untuk meningkatkan user experience serta membuat berbagai fungsi dapat berjalan di web app.<br>
-Django menggunakan _cookies_ untuk mengelola sesi user web app. Karena HTTP merupakan stateless protocol, maka Django menggunakan session ID yang disimpan sebagai _cookies_ untuk melakukan holding state. Kemudian, session ID ini dapat dipetakan ke data di web server sehingga User dapat menyimpan semua inormasi yang dibutuhkan.
+Django menggunakan _cookies_ untuk mengelola sesi user web app. Karena HTTP merupakan stateless protocol, maka Django menggunakan session ID yang disimpan sebagai _cookies_ untuk melakukan holding state. Kemudian, session ID ini dapat dipetakan ke data di web server sehingga User dapat menyimpan semua informasi yang dibutuhkan.
 
 # Apakah Penggunaan _Cookies_ Aman secara Default dalam Pengembangan Web?
 Dalam pengembangan suatu web app, penggunaan _cookies_ sangat esensial. Penggunaan _cookies_ dibutuhkan dalam pengembangan berbagai fungsi serta testing task. <br>
