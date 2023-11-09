@@ -1,6 +1,208 @@
 # razzle-fresh-stock
 Click untuk menuju website [razzle-fresh-stock](https://razzle-fresh-stock.adaptable.app)
 
+# Apa itu Django UserCreationForm?
+Django `UserCreationForm` adalah sistem authentication built in dari Django. Ketika kita menggunakan `UserCreationForm`, maka akan terbuat secara otomatis form field untuk mengisi username, password, dan password confirmation. Selain itu, kita bisa menambahkan field-field lain sesuai dengan yang kita tambahkan ke model `User`. Django `UserCreationForm` ini digunakan untuk membuat user baru yang dapat menggunakan web app.<br>
+Kelebihan dari menggunakan `UserCreationForm` antara lain:
+1. praktis
+2. dapat dikustomisasi
+3. konsisten
+Kekurangan dari menggunakan `UserCreationForm` antara lain:
+1. hanya dapat digunakan dengan model built-in Django `User`.
+2. sangat minimalis
+
+# Perbedaan antara Authentication dan Authorization di Django
+Secara general, authentication atau autentikasi adalah proses memverifikasi identitas user, dan authorization atau otorisasi adalah proses menentukan akses apa saja yang diperbolehkan kepada suatu user.<br>
+Dalam konteks Django, autentikasi diimplementasikan dalam suatu views dan forms built-in dari Django yang bernama `UserCreationForm`. `UserCreationForm` digunakan untuk melakukan autentikasi user. Sedangkan untuk otorisasi, contohnya adalah decorator `@login_required` yang digunakan untuk memberikan restriksi kepada user agar melakukan login terlebih dahulu sebelum dapat mengakses web app.
+
+# Apa itu _Cookies_?
+_Cookies_ adalah data berukuran kecil yang dikirim oleh web server kepada browser User dan disimpan di device User. _Cookies_ digunakan untuk menyimpan data sementara di sisi klien. Data ini digunakan untuk meningkatkan user experience serta membuat berbagai fungsi dapat berjalan di web app.<br>
+Django menggunakan _cookies_ untuk mengelola sesi user web app. Karena HTTP merupakan stateless protocol, maka Django menggunakan session ID yang disimpan sebagai _cookies_ untuk melakukan holding state. Kemudian, session ID ini dapat dipetakan ke data di web server sehingga User dapat menyimpan semua inormasi yang dibutuhkan.
+
+# Apakah Penggunaan _Cookies_ Aman secara Default dalam Pengembangan Web?
+Dalam pengembangan suatu web app, penggunaan _cookies_ sangat esensial. Penggunaan _cookies_ dibutuhkan dalam pengembangan berbagai fungsi serta testing task. <br>
+Penggunaan _cookies_ relatif aman jika digunakan dengan benar. Namun, ada juga berbagai risiko dan potensi masalah yang harus diwaspadai seperti :
+1. kebocoran informasi pribadi
+2. serangan XSS (_Cross Site Scripting_)
+3. serangan CSRF (_Cross Site Request Forgery_)
+
+# Implementasi Checklist Tugas 4
+step-by-step
+## Mengimplementasikan fungsi registrasi, login, dan logout
+1. mengimport fungsi-fungsi di `views.py` yang akan digunakan yaitu :
+```
+from django.shortcuts import redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages  
+from django.contrib.auth import authenticate, login, logout
+```
+2. buat fungsi register, login_user dan logout_user dengan code seperti berikut ini :
+```
+def register(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('main:show_main')
+        else:
+            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {}
+    return render(request, 'login.html', context)
+
+def logout_user(request):
+    logout(request)
+    return redirect('main:login')
+```
+3. membuat berkas baru bernama `register.html` di folder main/templates. berikut isi dari file:
+``` 
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Register</title>
+{% endblock meta %}
+
+{% block content %}  
+
+<div class = "login">
+    
+    <h1>Register</h1>  
+
+        <form method="POST" >  
+            {% csrf_token %}  
+            <table>  
+                {{ form.as_table }}  
+                <tr>  
+                    <td></td>
+                    <td><input type="submit" name="submit" value="Daftar"/></td>  
+                </tr>  
+            </table>  
+        </form>
+
+    {% if messages %}  
+        <ul>   
+            {% for message in messages %}  
+                <li>{{ message }}</li>  
+                {% endfor %}  
+        </ul>   
+    {% endif %}
+
+</div>  
+
+{% endblock content %}
+```
+4. membuat file baru bernama `login.html` di direktori main/templates. berikut isi dari `login.html`
+```
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+
+<div class = "login">
+
+    <h1>Login</h1>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>Username: </td>
+                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+            </tr>
+                    
+            <tr>
+                <td>Password: </td>
+                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td><input class="btn login_btn" type="submit" value="Login"></td>
+            </tr>
+        </table>
+    </form>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}     
+        
+    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+
+</div>
+
+{% endblock content %}
+```
+5. menambahkan potongan code di `main.html`
+```
+<a href="{% url 'main:logout' %}">
+    <button>
+        Logout
+    </button>
+</a>
+```
+6. mengimpor fungsi `register`, `login_user`, dan `logout_user` serta menambahkan pathnya di `urls.py` di direktori main.
+
+## Membuat dua akun pengguna dengan masing-masing 3 dummy data
+berikut dua akun pengguna dengan 3 dummy data 
+<br>
+
+![](<Screenshot 2023-09-27 035234.png>)
+![](<Screenshot 2023-09-27 035118.png>)
+
+## Menghubungkan model item dengan User
+1. buka file `models.py` lalu tambahkan kode dibawah ini untuk mengimport model.
+```
+from django.contrib.auth.models import User
+```
+2. tambahkan code dibawah ini pada model Product
+```
+user = models.ForeignKey(User, on_delete=models.CASCADE)
+```
+3. pada file `views.py`, tambahkan potongan code di bawah ini ke dalam fungsi create product
+```
+def create_product(request):
+ form = ProductForm(request.POST or None)
+
+ if form.is_valid() and request.method == "POST":
+     product = form.save(commit=False)
+     product.user = request.user
+     product.save()
+     return HttpResponseRedirect(reverse('main:show_main'))
+```
+4. ubah code pada fungsi `show_main` menjadi seperti berikut
+```
+def show_main(request):
+    products = Product.objects.filter(user=request.user)
+
+    context = {
+        'name': request.user.username,
+    ...
+```
+5. save perubahan lalu lakukan makemigrations. dalam proses migration akan ada error, lalu pilih 1 untuk menetapkan default value untuk field user pada semua row yang telah dibuat pada basis data. lalu pilih 1 lagi untuk menetapkan user ID 1 pada model yang sudah ada. setelah itu lakukan migrate.
+
+## Menampilkan detail informasi user yang sedag logged in seperti username dan emnerapkan cookies seperti last_login
+![](<Screenshot 2023-09-27 035717.png>)
+
 # Apa Perbedaan POST dan GET dalam Django?
 Dalam Django, POST dan GET adalah dua method HTTP yang digunakan dalam penggunaan form. Kedua method ini memiliki fungsi yang berbeda. <br>
 
